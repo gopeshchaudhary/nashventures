@@ -52,7 +52,6 @@ function filterBlackWhite(files) {
         return jimp.read(file)
     });
     Q.all(filesProcess).then((filesLoaded) => {
-        console.log(filesLoaded);
         filesLoaded.forEach((file, at) => {
             file.greyscale().write(files[at]);
         });
@@ -78,7 +77,7 @@ function compress(destination, tmpLocation) {
 
 function save2Db(searchstr, searchRes) {
     const deferred = Q.defer();
-    const history = new SearchHistory({ searchstr, searchRes });
+    const history = new SearchHistory({searchstr, searchRes});
     history.save((err) => {
         if (err) {
             deferred.reject('Failed to save to history');
@@ -88,24 +87,24 @@ function save2Db(searchstr, searchRes) {
     return deferred.promise;
 }
 
-function get4rmDb(){
+function get4rmDb() {
     const deferred = Q.defer();
-    SearchHistory.find({},{searchstr:1},(err,history)=>{
-       if(err){
-           deferred.reject('Failed to fetch history');
-       }
-       history = history.map((histdoc)=>{
-          return { [histdoc.id] : histdoc.searchstr } ;
-       });
-       deferred.resolve(history);
+    SearchHistory.find({}, {searchstr: 1}, (err, history) => {
+        if (err) {
+            deferred.reject('Failed to fetch history');
+        }
+        history = history.map((histdoc) => {
+            return {[histdoc.id]: histdoc.searchstr};
+        });
+        deferred.resolve(history);
     });
     return deferred.promise;
 }
 
-function getHistoryData(id,downloadUrl) {
+function getHistoryData(id, downloadUrl) {
     const deferred = Q.defer();
-    SearchHistory.findById({_id : id },{searchRes:1},(err,historyData)=>{
-        if(err){
+    SearchHistory.findById({_id: id}, {searchRes: 1}, (err, historyData) => {
+        if (err) {
             deferred.reject('Failed to fetch historyData');
         }
         deferred.resolve(historyData.searchRes);

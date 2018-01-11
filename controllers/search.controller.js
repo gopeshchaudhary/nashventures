@@ -10,15 +10,10 @@ const tmpLocation = `/tmp/nasimages/tmp/`;
 
 const router = express.Router();
 router.get('/', search);
-router.get('/list',getHistory);
-router.get('/images',getImages);
+router.get('/list', getHistory);
+router.get('/images', getImages);
 
 module.exports = router;
-
-function init(req, res) {
-    res.status(200).send('router working for search');
-}
-
 
 function search(req, res) {
     const query = url.parse(req.url, true).query;
@@ -27,7 +22,7 @@ function search(req, res) {
     }
     service.refreshLoc(downloadLocation);  // ORDER OF CALLING refreshLoc() !important
     service.refreshLoc(tmpLocation);
-    service.gsearch(googleUrl + query.q.replace(/ /g, "+"))
+    service.gsearch(googleUrl + query.q.toString().replace(/ /g, "+"))
         .then((html) => {
             const $ = cheerio.load(html);
             let imgQue = new Array();
@@ -52,22 +47,22 @@ function search(req, res) {
     });
 }
 
-function getHistory(req,res) {
-service.retrieve4DB().then((history)=>{
-    res.status(200).send(JSON.stringify(history));
-}).catch((err)=>{
-    res.sendStatus(500);
-});
+function getHistory(req, res) {
+    service.retrieve4DB().then((history) => {
+        res.status(200).send(JSON.stringify(history));
+    }).catch((err) => {
+        res.sendStatus(500);
+    });
 }
 
-function getImages(req,res) {
+function getImages(req, res) {
     const query = url.parse(req.url, true).query;
     if (!query.id) {
         res.sendStatus(400);
     }
-    service.getHistoryData(query.id).then((historyImages)=>{
+    service.getHistoryData(query.id).then((historyImages) => {
         res.status(200).send(JSON.stringify(historyImages));
-    }).catch((err)=>{
+    }).catch((err) => {
         res.sendStatus(500);
     });
 }
