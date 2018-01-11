@@ -41,7 +41,7 @@ function search(req, res) {
         service.deleteLoc(tmpLocation);
         return service.bwfilter(filesDone);
     }).then((filesDone) => {
-        res.status(200).send('Successfully Completed Image Search');
+        res.status(200).send(JSON.stringify({'msg': 'Successfully Completed Image Search'}));
     }).catch((err) => {
         res.sendStatus(500)
     });
@@ -49,7 +49,7 @@ function search(req, res) {
 
 function getHistory(req, res) {
     service.retrieve4DB().then((history) => {
-        res.status(200).send(JSON.stringify(history));
+        res.status(200).send(JSON.stringify({'data': history}));
     }).catch((err) => {
         res.sendStatus(500);
     });
@@ -61,7 +61,7 @@ function getImages(req, res) {
         res.sendStatus(400);
     }
     service.getHistoryData(query.id).then((historyImages) => {
-        res.status(200).send(JSON.stringify(historyImages));
+        res.status(200).send(JSON.stringify({'data': historyImages}));
     }).catch((err) => {
         res.sendStatus(500);
     });
