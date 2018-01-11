@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ process.on("SIGINT", () => {
 });
 
 express()
+    .use(cors())
     .use(bodyParser.urlencoded({extended: false}))
     .use(bodyParser.json())
     .use(express.static(path.join(__dirname, 'public')))
