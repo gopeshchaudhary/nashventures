@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const engines = require('consolidate');
 const path = require('path');
 const mongoose = require('mongoose');
 const PORT = process.env.PORT || 5000;
@@ -25,10 +26,7 @@ express()
     .use(cors())
     .use(bodyParser.urlencoded({extended: false}))
     .use(bodyParser.json())
-    .use(express.static(path.join(__dirname, 'public')))
+    .use(express.static(path.join(__dirname, 'views')))
     .use('/images', express.static(downloadLocation))
-    .set('views', path.join(__dirname, 'views'))
-    .set('view engine', 'ejs')
-    .get('/', (req, res) => res.render('pages/index'))
     .use('/search', require('./controllers/search.controller'))
     .listen(PORT, () => console.log(`Listening on ${ PORT }`))
