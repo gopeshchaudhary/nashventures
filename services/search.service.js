@@ -21,19 +21,27 @@ service.getHistoryData = getHistoryData;
 
 module.exports = service;
 
+// Refresh the location
+
 function refreshDir(location) {
     if (!fs.existsSync(location)) {
         fs.mkdirSync(location);
     }
 }
 
+//  Remove the directory
+
 function emptyDir(location) {
     fs.removeSync(location);
 }
 
+// Hit the resource from google
+
 function googleit(url) {
     return request(url);
 }
+
+// Download the image from google and revert a promise
 
 function imgDownloader(imgUrl, destination) {
     const deferred = Q.defer();
@@ -45,6 +53,8 @@ function imgDownloader(imgUrl, destination) {
     });
     return deferred.promise;
 }
+
+// Apply Black and White Filter and revert a promise
 
 function filterBlackWhite(files) {
     const deferred = Q.defer();
@@ -62,6 +72,8 @@ function filterBlackWhite(files) {
     return deferred.promise;
 }
 
+// Compress the image file and revert a promise
+
 function compress(destination, tmpLocation) {
     const deferred = Q.defer();
     minify.compress({
@@ -75,6 +87,8 @@ function compress(destination, tmpLocation) {
     return deferred.promise;
 }
 
+// Save image search to database for history and revert promise
+
 function save2Db(searchstr, searchRes) {
     const deferred = Q.defer();
     const history = new SearchHistory({searchstr, searchRes});
@@ -86,6 +100,8 @@ function save2Db(searchstr, searchRes) {
     });
     return deferred.promise;
 }
+
+// Get the history from database and revert a promise
 
 function get4rmDb() {
     const deferred = Q.defer();
@@ -100,6 +116,8 @@ function get4rmDb() {
     });
     return deferred.promise;
 }
+
+// Get the list for history data wrt ID  and revert a promise
 
 function getHistoryData(id, downloadUrl) {
     const deferred = Q.defer();
